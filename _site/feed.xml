@@ -1,1 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-28T10:35:55-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Nilesh Somani</title><subtitle>Software Engineer @ &lt;a href=&quot;https://pavilion.io/&quot;&gt;Pavilion&lt;/a&gt;.&lt;br&gt; Linux kernel driver and file system developer.&lt;br&gt;Computer Science graduate from &lt;a href=&quot;https://www.cs.stonybrook.edu/&quot;&gt;Stony Brook University&lt;/a&gt;.</subtitle><author><name>Nilesh Somani</name></author></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-28T15:32:03-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Nilesh Somani</title><subtitle>Software Engineer @ &lt;a href=&quot;https://pavilion.io/&quot;&gt;Pavilion&lt;/a&gt;.&lt;br&gt; Linux kernel driver and file system developer.&lt;br&gt;Computer Science graduate from &lt;a href=&quot;https://www.cs.stonybrook.edu/&quot;&gt;Stony Brook University&lt;/a&gt;.</subtitle><author><name>Nilesh Somani</name></author><entry><title type="html">Steps to share a folder between MacOS and Guest VirtualBox Linux VM</title><link href="http://localhost:4000/development-enviornment/2019/12/28/share-folder-mac-host-linux-guest.html" rel="alternate" type="text/html" title="Steps to share a folder between MacOS and Guest VirtualBox Linux VM" /><published>2019-12-28T00:00:00-08:00</published><updated>2019-12-28T00:00:00-08:00</updated><id>http://localhost:4000/development-enviornment/2019/12/28/share-folder-mac-host-linux-guest</id><content type="html" xml:base="http://localhost:4000/development-enviornment/2019/12/28/share-folder-mac-host-linux-guest.html">&lt;p&gt;Welcome to my first post!&lt;/p&gt;
+
+&lt;p&gt;The VirtualBox console has a fairly simple UI where you can add a host folder to share with your VM. Unfortunately for me the sharing folder through VirtualBox console has never worked. Eventually, I ended up spending close to 3 hours; browsing through various tutorials multiple times to achieve this. I hope this post helps you if you’re going through the same struggle.&lt;/p&gt;
+
+&lt;p&gt;Before we jump into the steps I would like to highlight why in the first place I wanted to do this.&lt;/p&gt;
+
+&lt;p&gt;I work on Linux platform but I prefer Mac as my development machine. In my case the VM basically acts like my build machine.&lt;/p&gt;
+
+&lt;p&gt;This post may help you if you’re one of those guys who is just getting started with Linux programming but don’t know how to develop for Linux on Mac.&lt;/p&gt;
+
+&lt;p&gt;I’m assuming you already have your VM created. I’m gonna use an Ubuntu Guest VM. First we’ll go through the steps on Mac and then on the VM.&lt;/p&gt;
+
+&lt;p&gt;Alright, lets begin!&lt;/p&gt;
+
+&lt;h1 id=&quot;macos&quot;&gt;MacOS&lt;/h1&gt;
+
+&lt;p&gt;Execute the following command on terminal.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;~ vboxmanage list vms
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;From the output, get the UUID/Name of the VM to share the folder with. Something like da3de34e-8f69-49af-bebb-be3227526092.&lt;/p&gt;
+
+&lt;p&gt;Then execute&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;~ vboxmanage sharedfolder add &amp;lt;UUID&amp;gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;dev&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--hostpath&lt;/span&gt; &amp;lt;folder_path&amp;gt; &lt;span class=&quot;nt&quot;&gt;--automount&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;UUID is the unique identifier the VM that we just noted.&lt;/li&gt;
+  &lt;li&gt;“dev” is the name of the vbox share folder device that will be created. You can use any name here.&lt;/li&gt;
+  &lt;li&gt;folder_path is absolute path of directory you want to share&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;linux-vm&quot;&gt;Linux VM&lt;/h1&gt;
+
+&lt;p&gt;Execute the following command on terminal.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt-get update
+apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;build-essential linux-headers-&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt; virtualbox-guest-dkms virtualbox-guest-additions-iso virtualbox-guest-x11
+adduser vboxsf
+reboot
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Once the system is back online. Lets add the guest additions.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mount &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; loop /usr/share/virtualbox/VBoxGuestAdditions.iso /mnt
+./mnt/VBoxLinuxAdditions.run
+umount /mnt
+reboot
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We’re almostcthere. We now mount the “dev” device which we created on mac on destination directory using regular mount command.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mount &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; vboxsf &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$UID&lt;/span&gt;,gid&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt; dev &amp;lt;dest_dir&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Mission Accomplished!&lt;/p&gt;
+
+&lt;p&gt;I hope you liked my first post.&lt;/p&gt;
+
+&lt;p&gt;Nilesh Somani&lt;/p&gt;</content><author><name>Nilesh Somani</name></author><summary type="html">Welcome to my first post!</summary></entry></feed>
